@@ -33,7 +33,7 @@ $: python etl.py 201701_BolsaFamiliaFolhaPagamento.csv
 No *dashboard*, utilizamos o **Power BI**, ferramenta self-service BI da Microsoft.
 > Atenção: O PowerBI precisa do driver do MySQL para fazer ligação com o banco de dados, baixe [aqui](https://dev.mysql.com/downloads/connector/net/6.10.html) e instale na sua máquina.
 
-Após a conexão estiver estabelicida, execute o comando abaixo para carregar os dados do DW:
+Após a conexão estiver estabelecida, execute o comando abaixo para carregar os dados do DW:
 ```SQL
 select
 MUNICIPIO,
