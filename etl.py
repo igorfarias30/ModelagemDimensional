@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 
+# Modelagem Dimensional
 # Igor Farias
 # Mateus
 
 def processing_data(data):
+    #data -> 'Data/201701_BolsaFamiliaFolhaPagamento.csv'
+
+    if data not in os.listdir(os.getcwd() + '\\Data'):
+        print("Dataset not found. Please, add dataset to Data folder")
+        exit()
+
     # reading just 100000 rows the dataframe
-    df = pd.read_csv('Data/201701_BolsaFamiliaFolhaPagamento.csv', error_bad_lines=False, encoding = "ISO-8859-1", sep='\t', nrows=1000)
+    df = pd.read_csv(data, error_bad_lines=False, encoding = "ISO-8859-1", sep='\t', nrows=1000)
 
     df['Regiao'] = None
     # add region name to dataframe
@@ -164,8 +171,6 @@ def load_data_fact(dataset):
                 municipio = """SELECT idDimCidade from DimMunicipio where MUNICIPIO = "{}" AND ESTADO = "{}" LIMIT 1""".format(dataset['Nome Município'][i], dataset['Estado'][i])
                 cursor.execute(municipio)
                 municipio = cursor.fetchone()
-
-                #if
 
                 #idDimTempo
                 mes, ano = df['Mês Competência'][i].split('/')
