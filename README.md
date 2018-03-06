@@ -4,25 +4,30 @@ Foram utilizados dados do governo federal para a execução do projeto, disponib
 
 ### Modelo Dimensional
 
-Para a criação do *Data Warehouse*, foi utilizado o SGBD MySQL.
->No diretório 'Data Warehouse', contém o script para criação do cubo, basta executar o script `BolsaFamilaDW.sql`, para gerar as dimensões e a fato.
+Para a criação do *Data Warehouse*, foi utilizado o SGBD MySQL. O modelo de relacionamento do cubo é o *Star Schema*.
+
+>No diretório 'Data Warehouse/', contém o script para criação do cubo, basta executar o script `BolsaFamilaDW.sql`, para gerar as dimensões e a fato.
+
+A imagem abaixo, exibe as tabelas dimensões e fato. O modelo estrela possui vantagem em questão de performance das *query*.
+
+![Data Warehouse](/image/dw.png)
 
 ### ETL
-Com o DW criado, utilizamos a linguagem de programação Python, para ler o conjunto de dados em formato **.csv**, devido ao sua poderosa *package* de processamento de dados:`pandas`.
+Com o DW criado, utilizamos a linguagem de programação Python (`python 3.6`) para ler o conjunto de dados em formato **.csv**, devido a sua poderosa *package* de processamento de dados:`pandas`.
 
-Para fazer a leitura de dados e carga é necessário que o driver do MySQL esteja instalado na máquina. Para instalar, abra o `cmd` e digite:
+Para fazer a leitura de dados e carga é necessário que o driver do MySQL esteja instalado na sua máquina. Para instalar, abra o `cmd` e digite:
 
 ```shell
-$: $ pip install PyMySQL
+$: pip install PyMySQL
  ```
 Clique [aqui](https://github.com/PyMySQL/PyMySQL) em caso de dúvidas.
 
 Após a instalação do driver, temos que executar o script. Para executar digite o comando abaixo:
- >**Nota:** o comando abaixo só funcionará, caso você tenha baixado o dataset, descompactado e ter colocado numa pasta chamada Data no repositório.
 
 ```python
 $: python etl.py 201701_BolsaFamiliaFolhaPagamento.csv
  ```
+ >**Nota:** o comando abaixo só funcionará, caso você tenha baixado o dataset, descompactado e ter colocado numa pasta chamada Data no repositório.
 
 ### Dashboard
 No *dashboard*, utilizamos o **Power BI**, ferramenta self-service BI da Microsoft.
@@ -31,7 +36,7 @@ No *dashboard*, utilizamos o **Power BI**, ferramenta self-service BI da Microso
 Após a conexão estiver estabelicida, execute o comando abaixo para carregar os dados do DW:
 ```SQL
 select
-MUNICIPIO, 
+MUNICIPIO,
 Estado,
 REGIAO,
 UF,
@@ -43,15 +48,15 @@ MES,
 DIA,
 VALOR_PARCELA
 from FatBolsaFamilia bf inner join dimmunicipio mun on bf.idDimCidade = mun.idDimCidade
-						inner join dimfavorecido fav on bf.idDimFavorecido = fav.idDimFavorecido
-						inner join dimfuncao fun on bf.idDimFuncao = fun.idDimFuncao
-						inner join dimfonte font on bf.idDimFonte = font.idDimFonte
-						inner join dimtempo temp on bf.idDimTempo = temp.idDimTempo
+				inner join dimfavorecido fav on bf.idDimFavorecido = fav.idDimFavorecido
+				inner join dimfuncao fun on bf.idDimFuncao = fun.idDimFuncao
+				inner join dimfonte font on bf.idDimFonte = font.idDimFonte
+				inner join dimtempo temp on bf.idDimTempo = temp.idDimTempo
 ```
 
-O nosso dashboard ficou dessa forma:
+O nosso dashboard ficou neste formato:
 
-![GitHub Logo](/image/bi.png)
+![Dash](/image/bi.png)
 
 
 ###### About
