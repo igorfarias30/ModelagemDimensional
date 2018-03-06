@@ -7,7 +7,7 @@
 def processing_data(data):
     #data -> 'Data/201701_BolsaFamiliaFolhaPagamento.csv'
 
-    if data not in os.listdir(os.getcwd() + '\\Data'):
+    if not os.path.isfile(data):
         print("Dataset not found. Please, add dataset to Data folder")
         exit()
 
