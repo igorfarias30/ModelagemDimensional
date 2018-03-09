@@ -4,7 +4,7 @@
 # Igor Farias
 # Mateus
 
-def processing_data(data):
+def processing_data(data, number = 100000):
     #data -> 'Data/201701_BolsaFamiliaFolhaPagamento.csv'
 
     if not os.path.isfile(data):
@@ -12,7 +12,7 @@ def processing_data(data):
         exit()
 
     # reading just 100000 rows the dataframe
-    df = pd.read_csv(data, error_bad_lines=False, encoding = "ISO-8859-1", sep='\t', nrows=1000)
+    df = pd.read_csv(data, error_bad_lines=False, encoding = "ISO-8859-1", sep='\t', nrows=int(number))
 
     df['Regiao'] = None
     # add region name to dataframe
@@ -194,7 +194,7 @@ def load_data_fact(dataset):
                 funcao = cursor.fetchone()
 
                 # loading data to fact table
-                insert = """INSERT INTO FatBolsaFamilia (idDimCidade, idDimFavorecido, idDimFuncao, idDimFonte, idDimTempo, VALOR_PARCELA) VALUES (%d, %d, %d, %d, %d, %.2f)"""%(municipio['idDimCidade'], favorecido['idDimFavorecido'], funcao['idDimFuncao'], fonte['idDimFonte'], tempo['idDimTempo'], dataset['Valor Parcela'][i])
+                insert = """INSERT INTO FatBolsaFamilia (idDimCidade, idDimFavorecido, idDimFuncao, idDimFonte, idDimTempo, VALOR_PARCELA) VALUES (%d, %d, %d, %d, %d, %.2f)"""%(municipio['idDimCidade'], favorecido['idDimFavorecido'], funcao['idDimFuncao'], fonte['idDimFonte'], tempo['idDimTempo'], float(dataset['Valor Parcela'][i]))
                 cursor.execute(insert)
 
         # commit data
@@ -213,10 +213,11 @@ if __name__ == '__main__':
         print("missing 'pymysql'. Type 'pip install PyMySQL' to install package")
         exit()
 
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 2:
         print("Missing a parameter in command line")
+        print("Run etl.py <file> <number_lines>")
         exit()
 
-    df = processing_data("Data/{}".format(sys.argv[1]))
+    df = processing_data("Data/{}".format(sys.argv[1]), sys.argv[2])
     load_data_dimension(df)
     load_data_fact(df)
