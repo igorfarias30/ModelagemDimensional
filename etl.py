@@ -95,7 +95,9 @@ def processing_data(data, number = 100000):
     df['Fonte'] = df['Fonte-Finalidade'].apply(lambda x: x.split('-')[0])
     df['Finalidade'] = df['Fonte-Finalidade'].apply(lambda x: x.split('-')[1])
     df.drop('Fonte-Finalidade', axis=1, inplace = True)
-    #df.to_csv('Data\\Bolsa_Familia.csv', sep=';')
+
+    # 'VALOR_PARCELA' is object, i have to remove char ',' and convert to float
+    df['Valor Parcela'] = df['Valor Parcela'].apply(lambda num: float(num.replace(',', '')) if ',' in num else float(num))
 
     # return the datasets
     return df
@@ -215,7 +217,7 @@ if __name__ == '__main__':
 
     if len(sys.argv) < 2:
         print("Missing a parameter in command line")
-        print("Run etl.py <file> <number_lines>")
+        print("Try: python etl.py <file> <number_lines>")
         exit()
 
     df = processing_data("Data/{}".format(sys.argv[1]), sys.argv[2])

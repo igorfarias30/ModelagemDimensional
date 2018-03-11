@@ -1,10 +1,10 @@
-# Trabalho de Modelagem Dimensional e Design de Dashboards
+# Projeto de Modelagem Dimensional e Design de Dashboards
 
 Foram utilizados dados do governo federal para a execução do projeto, disponibilizados no portal da transparência. Optamos por utilizar os dados do Bolsa Família e ver os pagamentos através do ano de 2017. Entretanto, em um único mês, a leitura do arquivo ficou inviável para ser lido em máquinas pessoais, logo, utilizamos parte dos dados para alimentarem os *dashboards*. Para baixar os dados, [clique aqui](http://www.portaltransparencia.gov.br/downloads/mensal.asp?c=BolsaFamiliaFolhaPagamento#meses01).
 
 ### Modelo Dimensional
 
-Para a criação do *Data Warehouse*, foi utilizado o SGBD MySQL. O modelo de relacionamento do cubo é o *Star Schema*.
+Para a criação do *Data Warehouse*, foi utilizado o MySQL Workbench. O modelo de relacionamento do cubo é o *Star Schema*.
 
 >No diretório 'Data Warehouse/', contém o script para criação do cubo, basta executar o script `BolsaFamilaDW.sql`, para gerar as dimensões e a fato.
 
@@ -30,10 +30,16 @@ $: python etl.py 201701_BolsaFamiliaFolhaPagamento.csv
  >**Nota:** o comando abaixo só funcionará, caso você tenha baixado o dataset, descompactado e ter colocado numa pasta chamada Data no repositório.
 
 ### Dashboard
-No *dashboard*, utilizamos o **Power BI**, ferramenta self-service BI da Microsoft.
-> Atenção: O PowerBI precisa do driver do MySQL para fazer ligação com o banco de dados, baixe [aqui](https://dev.mysql.com/downloads/connector/net/6.10.html) e instale na sua máquina.
+No *dashboard*, utilizamos o **Power BI**, que é uma ferramenta self-service BI, gratuita, da Microsoft.
+> Atenção: O PowerBI precisa do driver mysql para fazer a conexão com o banco de dados, você pode baixar [aqui](https://dev.mysql.com/downloads/connector/net/6.10.html) e instalar na sua máquina.
 
-Após a conexão estiver estabelecida, execute o comando abaixo para carregar os dados do DW:
+Com o **Power BI** aberto, você precisa executar os seguintes passos:
+
+1. Clique em `Obter Dados`
+- `Base de dados`
+- Procure por `Base de dados MySQL`
+- `Ligar`. Após clicar em ligar, irá aparecer uma janela de autenticação com o banco de dados.
+- Inclua em `Servidor` o ip e em `Base de Dados` o nome do banco de dados, que é `BolsaFamilaDW`. Em opções avançadas, inclua o código abaixo na `Instrução SQL`:
 ```SQL
 select
 MUNICIPIO,
@@ -48,16 +54,23 @@ MES,
 DIA,
 VALOR_PARCELA
 from FatBolsaFamilia bf inner join dimmunicipio mun on bf.idDimCidade = mun.idDimCidade
-				inner join dimfavorecido fav on bf.idDimFavorecido = fav.idDimFavorecido
-				inner join dimfuncao fun on bf.idDimFuncao = fun.idDimFuncao
-				inner join dimfonte font on bf.idDimFonte = font.idDimFonte
-				inner join dimtempo temp on bf.idDimTempo = temp.idDimTempo
+		inner join dimfavorecido fav on bf.idDimFavorecido = fav.idDimFavorecido
+		inner join dimfuncao fun on bf.idDimFuncao = fun.idDimFuncao
+		inner join dimfonte font on bf.idDimFonte = font.idDimFonte
+		inner join dimtempo temp on bf.idDimTempo = temp.idDimTempo
 ```
+- Clique em `Ok`.
 
 O nosso dashboard ficou neste formato:
+- Intrudução:
 
-![Dash](/image/bi.png)
+![Dash](/image/dash1.png)
+
+- Indicadores:
+
+![Dash2](/image/dash2.png)
 
 
 ###### About
-Igor Farias & Mateus Mota
+Igor Farias & Mateus Mota.
+Em caso de dúvidas: igorfarias30@hotmail.com

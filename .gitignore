@@ -2,3 +2,4 @@ __pycache__
 *.pyc
 Data/*.csv
 *.ipynb_checkpoints
+*.bak
